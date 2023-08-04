@@ -16,6 +16,37 @@ permissions:
 
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: pguyot/arm-runner-action@v2
+      with:
+        commands: |
+          sudo apt update
+          sudo apt install -y python3 python3-dev python3-pip build-essential cmake
+          git clone https://github.com/unum-cloud/ustore.git
+          cd ustore/ && git checkout main-dev && git submodule update --init --recursive
+          python -m pip install --force-reinstall conan==1.60.1
+          conan profile new --detect default
+          conan profile update settings.compiler=gcc default
+          conan profile update settings.compiler.version=11 default
+          conan profile update settings.compiler.libcxx=libstdc++11 default
+          conan create ./ustore unum/arm_linux --build=missing
+          cd ~/.conan && tar -czvf ustore_deps_arm_linux.tar.gz data/
+          mv ustore_deps_arm_linux.tar.gz /home/runner/work/ustore-deps/ustore-deps/
+                
+    - name: Upload archives to release
+      uses: xresloader/upload-to-github-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        file: ~/.conan/ustore_deps_arm_linux.tar.gz
+        update_latest_release: true
+
+
+
+
 #   versioning:
 #     name: Semantic Release
 #     runs-on: ubuntu-latest
@@ -69,52 +100,52 @@ jobs:
 #         file: ~/.conan/ustore_deps_x86_linux.tar.gz
 #         update_latest_release: true
 
-  build_conan_packages_python:
-    name: Build conan for python builds
-    # needs: versioning
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-      with:
-        persist-credentials: false
-        ref: 'main-dev'
+  # build_conan_packages_python:
+  #   name: Build conan for python builds
+  #   # needs: versioning
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v3
+  #     with:
+  #       persist-credentials: false
+  #       ref: 'main-dev'
 
-    - name: Get ustore 
-      run: |
-        git clone https://github.com/unum-cloud/ustore.git
-        cd ustore/ && git checkout main-dev && git submodule update --init --recursive
+  #   - name: Get ustore 
+  #     run: |
+  #       git clone https://github.com/unum-cloud/ustore.git
+  #       cd ustore/ && git checkout main-dev && git submodule update --init --recursive
         
-    - name: Move conanfike
-      run: mv conanfile.py ustore/
+  #   - name: Move conanfike
+  #     run: mv conanfile.py ustore/
 
-    - name: Install deps
-      run: |
-        sudo apt update
-        sudo apt install -y python3 python3-dev python3-pip build-essential cmake
+  #   - name: Install deps
+  #     run: |
+  #       sudo apt update
+  #       sudo apt install -y python3 python3-dev python3-pip build-essential cmake
 
-    - name: Prepare CMake, Conan and PyArrow
-      run: python -m pip install --force-reinstall conan==1.60.1
+  #   - name: Prepare CMake, Conan and PyArrow
+  #     run: python -m pip install --force-reinstall conan==1.60.1
 
-    - name: Install ustore dependencies using conan
-      run: |
-        conan profile new --detect default
-        conan profile update settings.compiler=gcc default
-        conan profile update settings.compiler.version=11 default
-        conan profile update settings.compiler.libcxx=libstdc++11 default
-        conan create ./ustore unum/x86_linux --build=missing
+  #   - name: Install ustore dependencies using conan
+  #     run: |
+  #       conan profile new --detect default
+  #       conan profile update settings.compiler=gcc default
+  #       conan profile update settings.compiler.version=11 default
+  #       conan profile update settings.compiler.libcxx=libstdc++11 default
+  #       conan create ./ustore unum/x86_linux --build=missing
 
-    - name: Create conan packages zip
-      run: |
-        cd ~/.conan && tar -czvf ustore_deps_x86_linux_python.tar.gz data/
-        ls
-        ls ~/.conan
+  #   - name: Create conan packages zip
+  #     run: |
+  #       cd ~/.conan && tar -czvf ustore_deps_x86_linux_python.tar.gz data/
+  #       ls
+  #       ls ~/.conan
                 
-    - name: Upload archive to release
-      uses: svenstaro/upload-release-action@v2
-      with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: ~/.conan/ustore_deps_x86_linux_python.tar.gz
-        asset_name: Ustore deps
-        tag: ${{ github.ref }}
-        overwrite: true
-        body: "This is my release text"
+  #   - name: Upload archive to release
+  #     uses: svenstaro/upload-release-action@v2
+  #     with:
+  #       repo_token: ${{ secrets.GITHUB_TOKEN }}
+  #       file: ~/.conan/ustore_deps_x86_linux_python.tar.gz
+  #       asset_name: Ustore deps
+  #       tag: ${{ github.ref }}
+  #       overwrite: true
+  #       body: "This is my release text"
