@@ -109,10 +109,12 @@ jobs:
         ls
         ls ~/.conan
                 
-    - name: Upload archives to release
-      uses: xresloader/upload-to-github-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Upload archive to release
+      uses: svenstaro/upload-release-action@v2
       with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: ~/.conan/ustore_deps_x86_linux_python.tar.gz
-        update_latest_release: true
+        asset_name: Ustore deps
+        tag: ${{ github.ref }}
+        overwrite: true
+        body: "This is my release text"
