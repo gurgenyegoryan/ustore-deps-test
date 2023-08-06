@@ -26,7 +26,7 @@ jobs:
 
     - uses: pguyot/arm-runner-action@v2
       with:
-        image_additional_mb: 12288
+        image_additional_mb: 10240
         base_image: raspios_lite_arm64:latest
         commands: |
           sudo rm -rf "/usr/local/share/boost" || true
