@@ -1,0 +1,31 @@
+name: Release
+
+on:
+  push:
+    branches: ["main-dev"]
+
+env:
+  BUILD_TYPE: Release
+  GH_TOKEN: ${{ secrets.SEMANTIC_RELEASE_TOKEN }}
+  
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+
+jobs:
+  build_arm:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        persist-credentials: false
+        ref: 'main-dev'
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v2
+      with:
+          platforms: arm
+    - run: uname -a
