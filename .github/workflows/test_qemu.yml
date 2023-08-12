@@ -28,7 +28,7 @@ jobs:
       uses: carlosperate/arm-none-eabi-gcc-action@v1
       with:
         release: '11.3.Rel1'
-    - run: find -name /home/runner/gcc-arm-none-eabi-11.3.1-linux/ libpthread.so
+    - run: find /home/runner/gcc-arm-none-eabi-11.3.1-linux/ -name libpthread.so
 
     # - name: arm-none-eabi-gcc
     #   uses: ryanwinter/arm-none-eabi-gcc@master
