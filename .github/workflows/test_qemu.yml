@@ -24,8 +24,7 @@ jobs:
         persist-credentials: false
         ref: 'main-dev'
 
-    - name: Set up QEMU
-      uses: docker/setup-qemu-action@v2
-      with:
-          platforms: arm
+    - name: arm-none-eabi-gcc
+      uses: ryanwinter/arm-none-eabi-gcc@master
+
     - run: uname -a
