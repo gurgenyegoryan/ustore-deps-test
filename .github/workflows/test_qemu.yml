@@ -45,8 +45,8 @@ jobs:
           g_path=$(which arm-none-eabi-g++)
           export CC=$gcc_path
           export CXX=$g_path
-          cp $(which arm-none-eabi-gcc) /usr/bin/arm-none-eabi-gcc
-          cp $(which arm-none-eabi-g++) /usr/bin/arm-none-eabi-g++
+          sudo cp $(which arm-none-eabi-gcc) /usr/bin/arm-none-eabi-gcc
+          sudo cp $(which arm-none-eabi-g++) /usr/bin/arm-none-eabi-g++
           export CMAKE_C_COMPILER=$gcc_path
           export CMAKE_CXX_COMPILER=$g_path
           conan profile update settings.compiler.libcxx=libstdc++11 default
