@@ -42,7 +42,7 @@ jobs:
           sed -i 's/^\(.*\)cmake = CMake(self)/# \1cmake = CMake(self)/; s/^\(.*\)cmake.configure()/# \1cmake.configure()/; s/^\(.*\)cmake.build()/# \1cmake.build()\n       pass/' ./conanfile.py
           conan profile new --detect default
           gcc_path=$(which arm-none-eabi-gcc)
-          g_path=$(which arm-none-eabi-g==)
+          g_path=$(which arm-none-eabi-g++)
           export CC=$gcc_path
           export CXX=$g_path
           
