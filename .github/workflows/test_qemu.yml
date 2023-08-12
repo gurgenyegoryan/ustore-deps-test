@@ -45,6 +45,8 @@ jobs:
           export CMAKE_CXX_COMPILER=$g_path
           conan profile update settings.compiler.libcxx=libstdc++11 default
           export CMAKE_SYSTEM_PROCESSOR=armv8-a
-          conan create . unum/arm_linux --build=missing -march=armv8-a
+          conan profile update settings.arch=arm64 default
+          conan profile update settings.arch_build=arm64 default
+          conan create . unum/arm_linux --build=missing
           cd ~/.conan && tar -czvf ustore_deps_arm_linux.tar.gz data/ && \
           mkdir archive/ && mv ustore_deps_arm_linux.tar.gz archive/
