@@ -63,8 +63,8 @@ jobs:
           export CC=$gcc_path
           export CXX=$g_path
           export LD_LIBRARY_PATH=/home/runner/gcc-arm-none-eabi-12.3.1-linux/arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi/lib:$LD_LIBRARY_PATH
-          export CFLAGS="-march=armv8-a --specs=nosys.specs -fPIC -lpthread" 
-          export CXXFLAGS="-march=armv8-a --specs=nosys.specs -fPIE -lpthread"
+          export CFLAGS="-march=armv8-a -fPIC" 
+          export CXXFLAGS="-march=armv8-a -fPIE"
           conan create . unum/arm_linux --build=missing
           cd ~/.conan && tar -czvf ustore_deps_arm_linux.tar.gz data/ && \
           mkdir archive/ && mv ustore_deps_arm_linux.tar.gz archive/
