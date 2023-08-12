@@ -55,13 +55,12 @@ jobs:
         conan profile update settings.arch=armv8 default
         export CFLAGS="-march=armv8-a --specs=nosys.specs -fPIC -lpthread" 
         export CXXFLAGS="-march=armv8-a --specs=nosys.specs -fPIE -lpthread"
-        export CC=$gcc_path
-        export CXX=$g_path
+        # export CC=$gcc_path
+        # export CXX=$g_path
         export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:/home/runner/gcc-arm-none-eabi-12.3.1-linux/arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi/lib:$LD_LIBRARY_PATH
 
     - name: Build conan package on ARM
       run: |
-          cd ustore/ && \
-          conan create . unum/arm_linux --build=missing
+          conan create ./ustore unum/arm_linux --build=missing
           cd ~/.conan && tar -czvf ustore_deps_arm_linux.tar.gz data/ && \
           mkdir archive/ && mv ustore_deps_arm_linux.tar.gz archive/
