@@ -38,13 +38,14 @@ jobs:
           conan profile new --detect default
           # conan profile update settings.compiler=arm-none-eabi-gcc default
           # conan profile update settings.compiler.version=10 default
-          which arm-none-eabi-gcc
-          which arm-none-eabi-g++
-          # export CC=/usr/bin/arm-none-eabi-gcc
+          gcc_path=$(which arm-none-eabi-gcc)
+          g_path=$(which arm-none-eabi-g++)
+          export CC=$gcc_path
+          export CXX=$g_path
           
-          # export CMAKE_C_COMPILER=/usr/bin/arm-none-eabi-gcc
-          # export CMAKE_CXX_COMPILER=/usr/bin/arm-none-eabi-g++
-          # conan profile update settings.compiler.libcxx=libstdc++11 default
-          # conan create . unum/arm_linux --build=missing
-          # cd ~/.conan && tar -czvf ustore_deps_arm_linux.tar.gz data/ && \
-          # mkdir archive/ && mv ustore_deps_arm_linux.tar.gz archive/
+          export CMAKE_C_COMPILER=$gcc_path
+          export CMAKE_CXX_COMPILER=$g_path
+          conan profile update settings.compiler.libcxx=libstdc++11 default
+          conan create . unum/arm_linux --build=missing
+          cd ~/.conan && tar -czvf ustore_deps_arm_linux.tar.gz data/ && \
+          mkdir archive/ && mv ustore_deps_arm_linux.tar.gz archive/
