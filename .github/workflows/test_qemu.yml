@@ -34,7 +34,7 @@ jobs:
     #   with:
     #     release: 10.3-2021.10
     - name: Install dependecies
-      run: sudo apt install -y python3 python3-dev python3-pip cmake git build-essential
+      run: sudo apt install -y python3 python3-dev python3-pip cmake git build-essential libpthread-arm-none-eabi
 
     - name: Build conan package on ARM
       run: |
