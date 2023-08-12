@@ -47,10 +47,12 @@ jobs:
           export CXX=$g_path
           sudo cp $(which arm-none-eabi-gcc) /usr/bin/arm-none-eabi-gcc
           sudo cp $(which arm-none-eabi-g++) /usr/bin/arm-none-eabi-g++
+          sudo mv /usr/bin/arm-none-eabi-gcc /usr/bin/gcc
+          sudo mv /usr/bin/arm-none-eabi-g++ /usr/bin/g++
           export CMAKE_C_COMPILER=$gcc_path
           export CMAKE_CXX_COMPILER=$g_path
           conan profile update settings.compiler.libcxx=libstdc++11 default
-          conan profile update settings.compiler=arm-none-eabi-g++ default
+          conan profile update settings.compiler=gcc default
           conan profile update settings.compiler.version=12 default
           # conan profile update settings.arch_build=armv8 default
           # export CMAKE_C_COMPILER_FORCED=1
