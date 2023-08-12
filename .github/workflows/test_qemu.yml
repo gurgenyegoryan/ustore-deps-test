@@ -34,33 +34,36 @@ jobs:
     #   with:
     #     release: 10.3-2021.10
     - name: Install dependecies
-      run: |
-        sudo apt install -y python3 python3-dev python3-pip cmake git build-essential
-        git clone https://github.com/unum-cloud/ustore.git
-        cd ustore/ && git checkout main-dev && git submodule update --init --recursive
-        python -m pip install --force-reinstall conan==1.60.1
-        sed -i 's/^\(.*\)cmake = CMake(self)/# \1cmake = CMake(self)/; s/^\(.*\)cmake.configure()/# \1cmake.configure()/; s/^\(.*\)cmake.build()/# \1cmake.build()\n       pass/' ./conanfile.py
-
-    - name: Concfigure conan
-      run: |
-        gcc_path=$(which arm-none-eabi-gcc)
-        g_path=$(which arm-none-eabi-g++)
-        sudo cp $(which arm-none-eabi-gcc) /usr/bin/gcc
-        sudo cp $(which arm-none-eabi-g++) /usr/bin/g++
-        conan profile new --detect default
-        conan profile update settings.compiler=gcc default
-        conan profile update settings.compiler.libcxx=libstdc++11 default
-        conan profile update settings.compiler.version=12 default
-        conan profile update settings.arch_build=armv8 default
-        conan profile update settings.arch=armv8 default
-        export CFLAGS="-march=armv8-a --specs=nosys.specs -fPIC -lpthread" 
-        export CXXFLAGS="-march=armv8-a --specs=nosys.specs -fPIE -lpthread"
-        # export CC=$gcc_path
-        # export CXX=$g_path
-        export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:/home/runner/gcc-arm-none-eabi-12.3.1-linux/arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi/lib:$LD_LIBRARY_PATH
+      run: sudo apt install -y python3 python3-dev python3-pip cmake git build-essential
 
     - name: Build conan package on ARM
       run: |
-          conan create ./ustore unum/arm_linux --build=missing
+          git clone https://github.com/unum-cloud/ustore.git
+          cd ustore/ && git checkout main-dev && git submodule update --init --recursive
+          python -m pip install --force-reinstall conan==1.60.1
+          sed -i 's/^\(.*\)cmake = CMake(self)/# \1cmake = CMake(self)/; s/^\(.*\)cmake.configure()/# \1cmake.configure()/; s/^\(.*\)cmake.build()/# \1cmake.build()\n       pass/' ./conanfile.py
+          conan profile new --detect default
+          gcc_path=$(which arm-none-eabi-gcc)
+          g_path=$(which arm-none-eabi-g++)
+          #export CC=$gcc_path
+          #export CXX=$g_path
+          sudo cp $(which arm-none-eabi-gcc) /usr/bin/arm-none-eabi-gcc
+          sudo cp $(which arm-none-eabi-g++) /usr/bin/arm-none-eabi-g++
+          sudo mv /usr/bin/arm-none-eabi-gcc /usr/bin/gcc
+          sudo mv /usr/bin/arm-none-eabi-g++ /usr/bin/g++
+          echo "AAAAAAAAAAAAAAAAAA" && gcc --version
+          #export CMAKE_C_COMPILER=$gcc_path
+          #export CMAKE_CXX_COMPILER=$g_path
+          conan profile update settings.compiler.libcxx=libstdc++11 default
+          # conan profile update settings.compiler=gcc default
+          conan profile update settings.compiler.version=12 default
+          conan profile update settings.arch_build=armv8 default
+          conan profile update settings.arch=armv8 default
+          export CC=$gcc_path
+          export CXX=$g_path
+          export LD_LIBRARY_PATH=/home/runner/gcc-arm-none-eabi-12.3.1-linux/arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi/lib:$LD_LIBRARY_PATH
+          export CFLAGS="-march=armv8-a --specs=nosys.specs -fPIC -lpthread" 
+          export CXXFLAGS="-march=armv8-a --specs=nosys.specs -fPIE -lpthread"
+          conan create . unum/arm_linux --build=missing
           cd ~/.conan && tar -czvf ustore_deps_arm_linux.tar.gz data/ && \
           mkdir archive/ && mv ustore_deps_arm_linux.tar.gz archive/
