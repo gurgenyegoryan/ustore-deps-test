@@ -36,8 +36,8 @@ jobs:
           python -m pip install --force-reinstall conan==1.60.1
           sed -i 's/^\(.*\)cmake = CMake(self)/# \1cmake = CMake(self)/; s/^\(.*\)cmake.configure()/# \1cmake.configure()/; s/^\(.*\)cmake.build()/# \1cmake.build()\n       pass/' ./conanfile.py
           conan profile new --detect default
-          conan profile update settings.compiler=gcc default
-          conan profile update settings.compiler.version=10 default
+          conan profile update settings.compiler=arm-none-eabi-gcc default
+          # conan profile update settings.compiler.version=10 default
           conan profile update settings.compiler.libcxx=libstdc++11 default
           conan create . unum/arm_linux --build=missing
           cd ~/.conan && tar -czvf ustore_deps_arm_linux.tar.gz data/ && \
