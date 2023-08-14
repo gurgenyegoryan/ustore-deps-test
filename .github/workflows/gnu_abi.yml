@@ -32,8 +32,30 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Show ip
-        run: ip addr
+      - name: Get docker daemon IP
+        id: dockerip
+        run: |
+          docker_ip=$(ip addr show docker0 | grep -Po 'inet \K[\d.]+') && \
+          echo "docker_ip=$docker_ip" >> "$GITHUB_OUTPUT"
+
+      - name: Set new password for runner user
+        id: userpass
+        run: |
+          user_pass="1122"
+          echo "$user_pass" | passwd --stdin runner
+          echo "user_pass=$user_pass" >> "$GITHUB_OUTPUT"
+
+      - name: Create conan packages using buildx
+        run: |
+          docker buildx create --use
+          docker buildx build \
+          --platform "linux/amd64,linux/arm64" \
+          --build-arg docker_ip=${{ steps.dockerip.outputs.docker_ip }} \
+          --build-arg user_pass=$${{ steps.userpass.outputs.user_pass }} \
+          --file ./Dockerfile \
+          --tag unum/ustore:$version-jammy \
+          --tag unum/ustore:latest \
+          --push .
   # build_arm:
   #   runs-on: ubuntu-20.04
   #   steps:
