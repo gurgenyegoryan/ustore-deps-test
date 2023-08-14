@@ -72,7 +72,7 @@ jobs:
           echo "CXX=$ARM_NONE_EABI_GCC_PATH/arm-none-eabi-g++" >> ~/.conan/profiles/default
           echo "CMAKE_HAVE_LIBC_PTHREAD=True" >> ~/.conan/profiles/default
           export C_INCLUDE_PATH=$ARM_NONE_EABI_GCC_PATH/../include
-          export LIBRARY_PATH=$ARM_NONE_EABI_GCC_PATH/../lib
+          export LD_LIBRARY_PATH=$ARM_NONE_EABI_GCC_PATH/../lib:$LD_LIBRARY_PATH
           export CPLUS_INCLUDE_PATH=$ARM_NONE_EABI_GCC_PATH/../include
           # export CC=$gcc_path
           # export CXX=$g_path
