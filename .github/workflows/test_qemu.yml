@@ -69,7 +69,7 @@ jobs:
           echo "CONAN_CMAKE_FIND_ROOT_PATH=$ARM_NONE_EABI_GCC_PATH" >> ~/.conan/profiles/default
           echo "CC=$ARM_NONE_EABI_GCC_PATH/arm-none-eabi-gcc" >> ~/.conan/profiles/default
           echo "CXX=$ARM_NONE_EABI_GCC_PATH/arm-none-eabi-g++" >> ~/.conan/profiles/default
-          # echo "CFLAGS='-march=armv8-a'" >> ~/.conan/profiles/default
+          echo "CMAKE_HAVE_LIBC_PTHREAD=True" >> ~/.conan/profiles/default
           
           # export CC=$gcc_path
           # export CXX=$g_path
@@ -80,7 +80,7 @@ jobs:
           unset CXXFLAGS
           export CFLAGS="-march=armv8-a -fPIC -specs=nosys.specs "
           # export CFLAGS="--specs=nosys.specs ֊pthread"
-          export CXXFLAGS="-march=armv8-a -fPIC -specs=nosys.specs -l pthread"
+          export CXXFLAGS="-march=armv8-a -fPIC -specs=nosys.specs"
           conan create . unum/arm_linux --build=missing
           cd ~/.conan && tar -czvf ustore_deps_arm_linux.tar.gz data/ && \
           mkdir archive/ && mv ustore_deps_arm_linux.tar.gz archive/
