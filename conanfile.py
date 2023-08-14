@@ -133,20 +133,20 @@ class ConanUStore(ConanFile):
 
 
     def requirements(self):
-        self.requires('xsimd/9.0.1')
-        self.requires('jemalloc/5.3.0')
-        self.requires('pcre2/10.42')
-        self.requires('mongo-c-driver/1.23.2')
-        self.requires('nlohmann_json/3.11.2')
-        self.requires('yyjson/0.6.0')
-        self.requires('simdjson/3.1.7')
-        self.requires('gtest/1.13.0')
-        self.requires('benchmark/1.7.1')
-        self.requires('argparse/2.9')
-        self.requires('clipp/1.2.3')
-        self.requires('libcurl/7.80.0')
+        # self.requires('xsimd/9.0.1')
+        # self.requires('jemalloc/5.3.0')
+        # self.requires('pcre2/10.42')
+        # self.requires('mongo-c-driver/1.23.2')
+        # self.requires('nlohmann_json/3.11.2')
+        # self.requires('yyjson/0.6.0')
+        # self.requires('simdjson/3.1.7')
+        # self.requires('gtest/1.13.0')
+        # self.requires('benchmark/1.7.1')
+        # self.requires('argparse/2.9')
+        # self.requires('clipp/1.2.3')
+        # self.requires('libcurl/7.80.0')
         self.requires('zlib/1.2.13')
-        self.requires('openssl/3.1.0')
+        # self.requires('openssl/3.1.0')
 
 
     def build(self):
