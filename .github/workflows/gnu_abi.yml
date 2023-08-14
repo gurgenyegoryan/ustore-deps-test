@@ -18,7 +18,6 @@ permissions:
 jobs:
   build_publish_docker:
     name: Build and publish docker
-    needs: versioning
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
