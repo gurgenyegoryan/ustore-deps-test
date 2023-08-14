@@ -48,7 +48,7 @@ jobs:
           # echo "CMAKE_HAVE_LIBC_PTHREAD=True" >> ~/.conan/profiles/default
           export LD_LIBRARY_PATH=/home/runner/work/ustore-deps-test/ustore-deps-test/arm-linux-gnueabi/lib:$LD_LIBRARY_PATH
           sudo mkdir -p /home/runner/work/ustore-deps-test/ustore-deps-test/arm-linux-gnueabi/lib || true
-          sudo cp -r /home/runner/work/ustore-deps-test/ustore-deps-test/arm-linux-gnueabi/lib/* /home/runner/work/ustore-deps-test/ustore-deps-test/arm-linux-gnueabi/lib
+          sudo cp -r /home/runner/work/ustore-deps-test/ustore-deps-test/arm-linux-gnueabi/lib/* /home/runner/work/build-tools-gcc/build-tools-gcc/arm-linux-gnueabi/arm-linux-gnueabi/lib/
           conan create . unum/arm_linux --build=missing -pr:b=default
           cd ~/.conan && tar -czvf ustore_deps_arm_linux.tar.gz data/ && \
           mkdir archive/ && mv ustore_deps_arm_linux.tar.gz archive/
