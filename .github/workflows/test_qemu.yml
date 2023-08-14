@@ -80,7 +80,7 @@ jobs:
           unset CXXFLAGS
           export CFLAGS="-march=armv8-a -fPIC -specs=nosys.specs"
           # export CFLAGS="--specs=nosys.specs ֊pthread"
-          export CXXFLAGS="-march=armv8-a -fPIC"
+          export CXXFLAGS="-march=armv8-a -fPIC -specs=nano.specs"
           conan create . unum/arm_linux --build=missing
           cd ~/.conan && tar -czvf ustore_deps_arm_linux.tar.gz data/ && \
           mkdir archive/ && mv ustore_deps_arm_linux.tar.gz archive/
