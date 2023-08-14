@@ -28,7 +28,7 @@ jobs:
       uses: carlosperate/arm-none-eabi-gcc-action@v1
       with:
         path-env-var: ARM_NONE_EABI_GCC_PATH
-        releas: 11.3.Rel1
+        release: 11.3.Rel1
     - name: The path will be exported to that environmental variable name
       run: echo "The output path is $ARM_NONE_EABI_GCC_PATH"
 
@@ -78,7 +78,7 @@ jobs:
           # export CXXFLAGS="-march=armv8-a -specs=nano.specs -specs=nosys.specs -specs=rdimon.specs -l pthread"
           unset CFLAGS
           unset CXXFLAGS
-          export CFLAGS="-march=armv8-a -fPIC"
+          export CFLAGS="-march=armv8-a -fPIC -specs=nosys.specs"
           # export CFLAGS="--specs=nosys.specs ֊pthread"
           export CXXFLAGS="-march=armv8-a -fPIC"
           conan create . unum/arm_linux --build=missing
