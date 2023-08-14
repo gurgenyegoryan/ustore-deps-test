@@ -53,7 +53,7 @@ jobs:
           --build-arg user_pass=${{ steps.userpass.outputs.user_pass }} \
           --file ./Dockerfile \
           --tag gurgenyegoryan/ustore-deps:latest \
-          --output type=registry .
+          --load .
       - name: Upload archives
         uses: xresloader/upload-to-github-release@v1
         env:
