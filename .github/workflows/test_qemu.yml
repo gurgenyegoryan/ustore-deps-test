@@ -67,8 +67,8 @@ jobs:
           export CXX=$g_path
           export LD_LIBRARY_PATH=/opt/hostedtoolcache/gcc-arm-none-eabi/10.3.2021.10/x64/gcc-arm-none-eabi-10.3-2021.10/bin/../lib:$LD_LIBRARY_PATH
           #export CFLAGS="-march=armv8-a -fPIC -l pthread" 
-          export CXXFLAGS="-march=armv8-a -specs=nano.specs -specs=nosys.specs -specs=rdimon.specs"
-          # export CXXFLAGS="-march=armv8-a"
+          export CXXFLAGS="-march=armv8-a -specs=nano.specs -specs=nosys.specs -specs=rdimon.specs -lpthreads"
+          export CFLAGS="-march=armv8-a -specs=nano.specs -specs=nosys.specs -specs=rdimon.specs -lpthreads"
           # export CFLAGS="--specs=nosys.specs ֊pthread"
           #export CXXFLAGS="-march=armv8-a -fPIC -l pthread"
           conan create . unum/arm_linux --build=missing
