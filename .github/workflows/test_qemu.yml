@@ -66,9 +66,9 @@ jobs:
           conan profile update settings.compiler.version=11 default
           # conan profile update settings.arch_build=armv8 default
           # conan profile update settings.arch=armv8 default
-          echo "CONAN_CMAKE_FIND_ROOT_PATH=$ARM_NONE_EABI_GCC_PATH >> ~/.conan/profiles/default"
-          echo "CC=$ARM_NONE_EABI_GCC_PATH/bin/arm-none-eabi-gcc >> ~/.conan/profiles/default"
-          echo "CXX=$ARM_NONE_EABI_GCC_PATH/bin/arm-none-eabi-g++ >> ~/.conan/profiles/default"
+          echo >> "CONAN_CMAKE_FIND_ROOT_PATH=$ARM_NONE_EABI_GCC_PATH >> ~/.conan/profiles/default"
+          echo >> "CC=$ARM_NONE_EABI_GCC_PATH/bin/arm-none-eabi-gcc >> ~/.conan/profiles/default"
+          echo >> "CXX=$ARM_NONE_EABI_GCC_PATH/bin/arm-none-eabi-g++ >> ~/.conan/profiles/default"
           # export CC=$gcc_path
           # export CXX=$g_path
           # export LD_LIBRARY_PATH=/opt/hostedtoolcache/gcc-arm-none-eabi/10.3.2021.10/x64/gcc-arm-none-eabi-10.3-2021.10/bin/../lib:$LD_LIBRARY_PATH
