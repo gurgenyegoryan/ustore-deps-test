@@ -16,9 +16,10 @@ permissions:
 
 
 jobs:
-  build_publish_docker:
-    name: Build and publish docker
+  build_conan_packages_arm64:
+    name: Build conan package for linux arm64
     runs-on: ubuntu-latest
+    # needs: versioning
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -37,63 +38,26 @@ jobs:
         run: |
           docker_ip=$(ip addr show docker0 | grep -Po 'inet \K[\d.]+') && \
           echo "docker_ip=$docker_ip" >> "$GITHUB_OUTPUT"
-
       - name: Set new password for runner user
         id: userpass
         run: |
           user_pass="1122"
-          echo "$user_pass" | passwd --stdin runner
+          echo "runner:$user_pass" | sudo chpasswd
           echo "user_pass=$user_pass" >> "$GITHUB_OUTPUT"
-
       - name: Create conan packages using buildx
         run: |
           docker buildx create --use
           docker buildx build \
-          --platform "linux/amd64,linux/arm64" \
+          --platform "linux/arm64" \
           --build-arg docker_ip=${{ steps.dockerip.outputs.docker_ip }} \
           --build-arg user_pass=$${{ steps.userpass.outputs.user_pass }} \
           --file ./Dockerfile \
-          --tag unum/ustore:$version-jammy \
-          --tag unum/ustore:latest \
-          --push .
-  # build_arm:
-  #   runs-on: ubuntu-20.04
-  #   steps:
-  #   - uses: actions/checkout@v3
-  #     with:
-  #       persist-credentials: false
-  #       ref: 'main-dev'
-
-  #   - name: Install dependecies
-  #     run: |
-  #       sudo apt-get update 
-  #       sudo apt-get install -y python3 python3-dev python3-pip cmake git build-essential libpthread-stubs0-dev wget libmpc-dev
-
-  #   - name: Build conan package on ARM
-  #     run: |
-  #         # wget https://ftp.gnu.org/gnu/gcc/gcc-11.2.0/gcc-11.2.0.tar.xz
-  #         # tar xf gcc-11.2.0.tar.xz
-  #         # cd gcc-11.2.0 && \
-  #         # ./configure --target=aarch64-linux-gnu --prefix=/usr/local && \
-  #         # make -j4 && sudo make install
-  #         # /usr/local/bin/aarch64-linux-gnu-gcc --version
-  #         # # git clone https://github.com/unum-cloud/ustore.git
-  #         # # cd ustore/ && git checkout main-dev && git submodule update --init --recursive
-  #         # # python -m pip install --force-reinstall conan==1.60.1
-  #         # # sed -i 's/^\(.*\)cmake = CMake(self)/# \1cmake = CMake(self)/; s/^\(.*\)cmake.configure()/# \1cmake.configure()/; s/^\(.*\)cmake.build()/# \1cmake.build()\n       pass/' ./conanfile.py
-  #         # # conan profile new --detect default
-  #         # # conan profile update settings.compiler.libcxx=libstdc++11 default
-  #         # # conan profile update settings.compiler.version=13 default
-  #         # # conan profile update settings.arch_build=armv8 default
-  #         # # conan profile update settings.arch=armv8 default
-  #         # # export ARM_NONE_EABI_GCC_PATH=/home/runner/work/ustore-deps-test/ustore-deps-test/arm-linux-gnueabi/bin
-  #         # # echo "CONAN_CMAKE_FIND_ROOT_PATH=$ARM_NONE_EABI_GCC_PATH" >> ~/.conan/profiles/default
-  #         # # echo "CC=$ARM_NONE_EABI_GCC_PATH/arm-linux-gnueabi-gcc" >> ~/.conan/profiles/default
-  #         # # echo "CXX=$ARM_NONE_EABI_GCC_PATH/arm-linux-gnueabi-g++" >> ~/.conan/profiles/default
-  #         # # # echo "CMAKE_HAVE_LIBC_PTHREAD=True" >> ~/.conan/profiles/default
-  #         # # export LD_LIBRARY_PATH=/home/runner/work/ustore-deps-test/ustore-deps-test/arm-linux-gnueabi/lib:$LD_LIBRARY_PATH
-  #         # # sudo mkdir -p /home/runner/work/build-tools-gcc/build-tools-gcc/arm-linux-gnueabi/arm-linux-gnueabi/lib/ || true
-  #         # # sudo cp -r /home/runner/work/ustore-deps-test/ustore-deps-test/arm-linux-gnueabi/lib/* /home/runner/work/build-tools-gcc/build-tools-gcc/arm-linux-gnueabi/arm-linux-gnueabi/lib/
-  #         # # conan create . unum/arm_linux --build=missing -pr:b=default
-  #         # # cd ~/.conan && tar -czvf ustore_deps_arm_linux.tar.gz data/ && \
-  #         # # mkdir archive/ && mv ustore_deps_arm_linux.tar.gz archive/
+          --tag gurgenyegoryan/ustore-deps:latest \
+          --output type=registry .
+      - name: Upload archives
+        uses: xresloader/upload-to-github-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          file: ustore_deps_arm_linux.tar.gz
+          update_latest_release: true
