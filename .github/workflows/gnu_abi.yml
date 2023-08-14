@@ -36,7 +36,7 @@ jobs:
           cd gcc-11.2.0 && \
           ./configure --target=aarch64-linux-gnu --prefix=/usr/local && \
           make -j4 && sudo make install
-          aarch64-linux-gnu-gcc --version
+          /usr/local/bin/aarch64-linux-gnu-gcc --version
           # git clone https://github.com/unum-cloud/ustore.git
           # cd ustore/ && git checkout main-dev && git submodule update --init --recursive
           # python -m pip install --force-reinstall conan==1.60.1
