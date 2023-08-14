@@ -79,7 +79,6 @@ jobs:
           export C_COMPILE_FLAGS="-march=armv8-a -fPIC"
           # export CFLAGS="--specs=nosys.specs ֊pthread"
           export CXX_COMPILE_FLAGS="-march=armv8-a -fPIC"
-          C_COMPILE_FLAGS and CXX_COMPILE_FLAGS
           conan create . unum/arm_linux --build=missing
           cd ~/.conan && tar -czvf ustore_deps_arm_linux.tar.gz data/ && \
           mkdir archive/ && mv ustore_deps_arm_linux.tar.gz archive/
