@@ -67,6 +67,7 @@ jobs:
   build_conan_pacjjkages_arm64:
     name: Build conannn package for linux arm64
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' }}
     # needs: versioning
     steps:
       - name: Checkout
