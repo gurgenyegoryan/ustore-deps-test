@@ -20,7 +20,7 @@ jobs:
   build_conan_packages_arm64:
     name: Build conan package for linux arm64
     runs-on: ubuntu-latest
-    if: ${{ github.ref_name == 'main-dev' && github.event_name == 'workflow_dispatch' }}
+    if: ${{ github.event_name == 'workflow_dispatch' }}
     # needs: versioning
     steps:
       - name: Checkout
